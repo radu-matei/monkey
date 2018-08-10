@@ -91,6 +91,12 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return applyFunction(function, args)
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
+	case *ast.ArrayLiteral:
+		e := evalExpressions(node.Elements, env)
+		if len(e) == 1 && isError(e[0]) {
+			return e[0]
+		}
+		return &object.Array{Elements: e}
 	}
 
 	return nil
