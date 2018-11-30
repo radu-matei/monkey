@@ -97,6 +97,19 @@ func (l *Lexer) NextToken() token.Token {
 	return tok
 }
 
+// GetLineNumber returns the line number of the token
+func (l *Lexer) GetLineNumber() int {
+	lines := 1
+
+	for i := 0; i < l.readPosition && i < len(l.input); i++ {
+		if rune(l.input[i]) == rune('\n') {
+			lines++
+		}
+	}
+
+	return lines
+}
+
 func (l *Lexer) skipWhitespace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
