@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -14,11 +15,20 @@ import (
 	"github.com/radu-matei/monkey/repl"
 )
 
+var (
+	tokenOutputPtr *bool
+)
+
+func init() {
+	tokenOutputPtr = flag.Bool("output-tokens", false, "when passed, it will print all tokens from the source code")
+	flag.Parse()
+}
+
 func main() {
 	// no source code input file provided, starting REPL
 	if len(os.Args) == 1 {
 		fmt.Printf("REPL\n")
-		repl.Start(os.Stdin, os.Stdout)
+		repl.Start(os.Stdin, os.Stdout, true)
 
 		// a source code input file was provided, attempting to interpret
 	} else if len(os.Args) == 2 {
@@ -28,7 +38,7 @@ func main() {
 		}
 
 		env := object.NewEnvironment()
-		l := lexer.New(string(input))
+		l := lexer.New(string(input), true)
 		p := parser.New(l)
 
 		program := p.ParseProgram()

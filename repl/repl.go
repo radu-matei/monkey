@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/radu-matei/monkey/object"
-
 	"github.com/radu-matei/monkey/evaluator"
 	"github.com/radu-matei/monkey/lexer"
+	"github.com/radu-matei/monkey/object"
 	"github.com/radu-matei/monkey/parser"
 )
 
 const prompt = ">>"
 
 // Start starts a REPL
-func Start(in io.Reader, out io.Writer) {
+func Start(in io.Reader, out io.Writer, output bool) {
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
 
@@ -26,7 +25,7 @@ func Start(in io.Reader, out io.Writer) {
 			return
 		}
 		line := scanner.Text()
-		l := lexer.New(line)
+		l := lexer.New(line, output)
 		p := parser.New(l)
 
 		program := p.ParseProgram()

@@ -1,6 +1,10 @@
 package lexer
 
-import "github.com/radu-matei/monkey/token"
+import (
+	"fmt"
+
+	"github.com/radu-matei/monkey/token"
+)
 
 // Lexer represents a simple lexer for Monkey
 type Lexer struct {
@@ -8,11 +12,13 @@ type Lexer struct {
 	position     int
 	readPosition int
 	ch           byte
+
+	output bool
 }
 
 // New returns a new instance of a lexer
-func New(input string) *Lexer {
-	l := &Lexer{input: input}
+func New(input string, output bool) *Lexer {
+	l := &Lexer{input: input, output: output}
 	l.readChar()
 	return l
 }
@@ -94,6 +100,10 @@ func (l *Lexer) NextToken() token.Token {
 	}
 
 	l.readChar()
+
+	if l.output {
+		fmt.Printf("%+v \n ", tok)
+	}
 	return tok
 }
 
